@@ -1,6 +1,6 @@
-package main
+package alina
 
-import "alina/client/config"
+import "alina/config"
 
 type Alina interface {
 	Init(config Config) error
@@ -8,7 +8,11 @@ type Alina interface {
 	GetMessages() error
 }
 
-type Token interface {
+type Tokenizer interface {
+	Init(config Config) error
+	StartSession() error
+	GetServer() (string, error)
+	GetKey() (string, error)
 }
 
 type Config interface {
@@ -17,5 +21,7 @@ type Config interface {
 
 func New(key string) Alina {
 	cfg := config.New(key)
-
+	var a Alina
+	a.Init(cfg)
+	return a
 }
