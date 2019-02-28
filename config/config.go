@@ -1,17 +1,38 @@
 package config
 
-import "alina"
+import (
+	"alina/definitions"
+	"time"
+)
 
-func New(key string) alina.Config {
+func New(token string, version string, groupid string, longPollIntervalInMillis int) definitions.Config {
 	return &config{
-		key: key,
+		token:                    token,
+		version:                  version,
+		groupid:                  groupid,
+		longPollIntervalInMillis: time.Duration(longPollIntervalInMillis) * time.Millisecond,
 	}
 }
 
 type config struct {
-	key string
+	token                    string
+	version                  string
+	groupid                  string
+	longPollIntervalInMillis time.Duration
 }
 
-func (c *config) GetKey() string {
-	return c.key
+func (c *config) GetAccessToken() string {
+	return c.token
+}
+
+func (c *config) GetVersion() string {
+	return c.version
+}
+
+func (c *config) GetGroupId() string {
+	return c.groupid
+}
+
+func (c *config) GetLongPollInterval() time.Duration {
+	return c.longPollIntervalInMillis
 }
