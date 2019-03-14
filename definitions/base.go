@@ -1,7 +1,6 @@
 package definitions
 
 import (
-	"alina/definitions/api"
 	"time"
 )
 
@@ -9,7 +8,7 @@ type Alina interface {
 	Init() error
 	Run()
 	AddMessageHandler(func(PrivateMessage, error))
-	GetMessagesApi() api.MessagesApi
+	GetMessagesApi() MessagesApi
 }
 
 type Requester interface {

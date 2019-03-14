@@ -54,7 +54,14 @@ func main() {
 		logger.Info(fmt.Sprintf("incoming message: %v from %v\r\n", text, from))
 	})
 
-	alina.GetMessagesApi().SendMessage("16729505", "йоу")
+	//alina.GetMessagesApi().SendSimpleMessage("16729505", "йоу")
+	messages, err := alina.GetMessagesApi().GetHistory("16729505", 0, 200, "-1", nil)
+	for _, v := range messages {
+		println(v.GetText())
+	}
+	if err != nil {
+
+	}
 
 	alina.Run()
 

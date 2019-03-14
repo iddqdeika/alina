@@ -2,7 +2,7 @@ package dispatcher
 
 import (
 	"alina/definitions"
-	"alina/requester/updateobjects"
+	"alina/objects"
 )
 
 func New() definitions.Dispatcher {
@@ -28,7 +28,7 @@ func (d *dispatcher) AddMessageHandler(handler func(message definitions.PrivateM
 }
 
 func (d *dispatcher) handleMessage(update definitions.UpdateBody) {
-	msg, err := updateobjects.NewPrivateMessage(update)
+	msg, err := objects.NewPrivateMessageFromUpdate(update)
 	for _, v := range d.messageHandlers {
 		v(msg, err)
 	}

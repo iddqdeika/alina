@@ -1,18 +1,26 @@
-package updateobjects
+package objects
 
 import (
 	"alina/definitions"
 	"encoding/json"
 )
 
-func NewPrivateMessage(data definitions.UpdateBody) (definitions.PrivateMessage, error) {
-	bts, err := json.Marshal(data.GetObject())
+func NewPrivateMessageFromUpdate(data definitions.UpdateBody) (definitions.PrivateMessage, error) {
+	return NewPrivateMessageFromInterface(data.GetObject())
+}
+
+func NewPrivateMessageFromInterface(messageBody interface{}) (definitions.PrivateMessage, error) {
+	bts, err := json.Marshal(messageBody)
 	if err != nil {
 		return nil, err
 	}
+	return NewPrivateMessage(bts)
+}
+
+func NewPrivateMessage(data []byte) (definitions.PrivateMessage, error) {
 	pm := &privateMessage{}
 
-	err = json.Unmarshal(bts, pm)
+	err := json.Unmarshal(data, pm)
 	if err != nil {
 		return nil, err
 	}

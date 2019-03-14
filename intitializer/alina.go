@@ -4,7 +4,6 @@ import (
 	"alina/api/messages"
 	"alina/config"
 	"alina/definitions"
-	"alina/definitions/api"
 	"alina/dispatcher"
 	"alina/requester"
 )
@@ -34,10 +33,10 @@ func New(token string, version string, groupid string, logger definitions.Logger
 type alina struct {
 	requester   definitions.Requester
 	dispatcher  definitions.Dispatcher
-	messagesApi api.MessagesApi
+	messagesApi definitions.MessagesApi
 }
 
-func (a *alina) GetMessagesApi() api.MessagesApi {
+func (a *alina) GetMessagesApi() definitions.MessagesApi {
 	return a.messagesApi
 }
 
