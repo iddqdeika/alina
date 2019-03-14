@@ -1,23 +1,30 @@
-package objects
+package factories
 
 import (
 	"alina/definitions"
 	"encoding/json"
 )
 
-func NewPrivateMessageFromUpdate(data definitions.UpdateBody) (definitions.PrivateMessage, error) {
-	return NewPrivateMessageFromInterface(data.GetObject())
+func NewPrivateMessageFactory() definitions.PrivateMessagesFactory {
+	return &privateMessageFactory{}
 }
 
-func NewPrivateMessageFromInterface(messageBody interface{}) (definitions.PrivateMessage, error) {
+type privateMessageFactory struct {
+}
+
+func (f *privateMessageFactory) NewPrivateMessageFromUpdate(data definitions.UpdateBody) (definitions.PrivateMessage, error) {
+	return f.NewPrivateMessageFromInterface(data.GetObject())
+}
+
+func (f *privateMessageFactory) NewPrivateMessageFromInterface(messageBody interface{}) (definitions.PrivateMessage, error) {
 	bts, err := json.Marshal(messageBody)
 	if err != nil {
 		return nil, err
 	}
-	return NewPrivateMessage(bts)
+	return f.NewPrivateMessage(bts)
 }
 
-func NewPrivateMessage(data []byte) (definitions.PrivateMessage, error) {
+func (f *privateMessageFactory) NewPrivateMessage(data []byte) (definitions.PrivateMessage, error) {
 	pm := &privateMessage{}
 
 	err := json.Unmarshal(data, pm)

@@ -1,7 +1,7 @@
 package initializer
 
 import (
-	"alina/api/messages"
+	"alina/api/messagesapi"
 	"alina/config"
 	"alina/definitions"
 	"alina/dispatcher"
@@ -24,7 +24,7 @@ func New(token string, version string, groupid string, logger definitions.Logger
 	}
 	al.requester = req
 
-	msg := messages.New(req, logger)
+	msg := messagesapi.New(req, logger)
 	al.messagesApi = msg
 
 	return al, nil

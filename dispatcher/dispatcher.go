@@ -2,15 +2,15 @@ package dispatcher
 
 import (
 	"alina/definitions"
-	"alina/objects"
 )
 
-func New() definitions.Dispatcher {
-	return &dispatcher{}
+func New(privateMessageFactory definitions.PrivateMessagesFactory) definitions.Dispatcher {
+	return &dispatcher{privateMessageFactory: privateMessageFactory}
 }
 
 type dispatcher struct {
-	messageHandlers []func(message definitions.PrivateMessage, err error)
+	privateMessageFactory definitions.PrivateMessagesFactory
+	messageHandlers       []func(message definitions.PrivateMessage, err error)
 }
 
 func (d *dispatcher) Handle(update definitions.UpdateBody) {
@@ -28,7 +28,7 @@ func (d *dispatcher) AddMessageHandler(handler func(message definitions.PrivateM
 }
 
 func (d *dispatcher) handleMessage(update definitions.UpdateBody) {
-	msg, err := objects.NewPrivateMessageFromUpdate(update)
+	msg, err := d.privateMessageFactory.NewPrivateMessageFromUpdate(update)
 	for _, v := range d.messageHandlers {
 		v(msg, err)
 	}

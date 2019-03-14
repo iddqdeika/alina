@@ -1,25 +1,26 @@
-package messages
+package messagesapi
 
 import (
 	"alina/definitions"
-	"alina/objects"
 	"encoding/json"
 	"fmt"
 	"strconv"
 )
 
-func New(requester definitions.Requester, logger definitions.Logger) definitions.MessagesApi {
+func New(requester definitions.Requester, logger definitions.Logger, privateMessageFactory definitions.PrivateMessagesFactory) definitions.MessagesApi {
 	mapi := &messagesApi{
-		requester: requester,
-		logger:    logger,
+		requester:             requester,
+		logger:                logger,
+		privateMessageFactory: privateMessageFactory,
 	}
 
 	return mapi
 }
 
 type messagesApi struct {
-	requester definitions.Requester
-	logger    definitions.Logger
+	requester             definitions.Requester
+	logger                definitions.Logger
+	privateMessageFactory definitions.PrivateMessagesFactory
 }
 
 func (a *messagesApi) SendSimpleMessage(peerId string, message string) {
@@ -44,6 +45,7 @@ func (a *messagesApi) GetHistory(peerId string, offset int, count int, startMess
 		params["fields"] = toList(fields)
 	}
 	data, err := a.requester.SendGet("messages.getHistory", params)
+
 	if err != nil {
 		return nil, err
 	}
@@ -59,7 +61,7 @@ func (a *messagesApi) GetHistory(peerId string, offset int, count int, startMess
 
 	for _, val := range responseBody.Response.Items {
 		var msg definitions.PrivateMessage
-		msg, err = objects.NewPrivateMessageFromInterface(val)
+		msg, err = a.privateMessageFactory.NewPrivateMessageFromInterface(val)
 		if err != nil {
 			return nil, fmt.Errorf("error during parsing message from history: %v", err)
 		}

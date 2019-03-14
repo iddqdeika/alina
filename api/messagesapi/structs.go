@@ -1,4 +1,4 @@
-package messages
+package messagesapi
 
 type messagesHistoryResponseBody struct {
 	Response messagesHistoryResponse `json:"response"`
