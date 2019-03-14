@@ -5,8 +5,10 @@ import (
 	"encoding/json"
 )
 
-func NewPrivateMessageFactory() definitions.PrivateMessagesFactory {
-	return &privateMessageFactory{}
+var privateMessageF = &privateMessageFactory{}
+
+func GetPrivateMessageFactory() definitions.PrivateMessagesFactory {
+	return privateMessageF
 }
 
 type privateMessageFactory struct {
