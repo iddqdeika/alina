@@ -2,6 +2,7 @@ package main
 
 import (
 	"alina/api/messagesapi"
+	"alina/config"
 	"alina/definitions"
 	"alina/dispatcher"
 	"alina/factories"
@@ -10,6 +11,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"strconv"
+	"strings"
 )
 
 const (
@@ -52,19 +55,19 @@ func main() {
 			logger.Error(err)
 			return
 		}
-		text := message.GetText()
-		from := message.GetPeerId()
-		logger.Info(fmt.Sprintf("incoming message: %v from %v", text, from))
+		if strings.Contains(message.GetText(), "лучшая жена") {
+			alina.GetMessagesApi().SendSimpleMessage(strconv.Itoa(message.GetPeerId()), "Алина")
+		}
 	})
 
 	//alina.GetMessagesApi().SendSimpleMessage("16729505", "йоу")
-	messages, err := alina.GetMessagesApi().GetHistory("16729505", 0, 200, "-1", nil)
-	for _, v := range messages {
-		println(v.GetText())
-	}
-	if err != nil {
-
-	}
+	//messages, err := alina.GetMessagesApi().GetHistory("16729505", 0, 200, "-1", nil)
+	//for _, v := range messages {
+	//	println(v.GetText())
+	//}
+	//if err != nil {
+	//
+	//}
 
 	alina.Run()
 
@@ -75,7 +78,7 @@ func New(token string, version string, groupid string, logger definitions.Logger
 	var req definitions.Requester
 	al := &alina{}
 
-	cfg = NewConfig(token, version, groupid, longPollInterval)
+	cfg = config.NewConfig(token, version, groupid, longPollInterval)
 
 	dispatcher := dispatcher.New(factories.GetPrivateMessageFactory())
 	al.dispatcher = dispatcher

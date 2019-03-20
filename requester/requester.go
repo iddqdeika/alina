@@ -195,13 +195,12 @@ func (r *requester) SendGet(methodName string, paramMap map[string]string) ([]by
 	if err != nil {
 		return nil, fmt.Errorf("error during sending request for method %v, err:%v", methodName, err)
 	}
-	if resp.StatusCode != 200 {
-		return nil, fmt.Errorf("error during sending request for method %v, code:%v", methodName, resp.StatusCode)
-	}
-
 	data, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return nil, fmt.Errorf("error during sending request for methid %v, err:%v", err)
+	}
+	if resp.StatusCode != 200 {
+		return data, fmt.Errorf("error during sending request for method %v, code:%v", methodName, resp.StatusCode)
 	}
 
 	return data, nil
