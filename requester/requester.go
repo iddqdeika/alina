@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"time"
 )
 
@@ -181,16 +182,29 @@ func (r *requester) getLongPollServerUrl() string {
 }
 
 func (r *requester) SendGet(methodName string, paramMap map[string]string) ([]byte, error) {
-	var parameters string
+	var u *url.URL
+	u, err := url.Parse("https://api.vk.com")
+	if err != nil {
+		return nil, fmt.Errorf("error during url parsing: &v", err)
+	}
+	u.Path += fmt.Sprintf("/method/%v", methodName)
+	params := url.Values{}
+	params.Add("access_token", r.config.GetAccessToken())
+	params.Add("v", r.config.GetVersion())
+
+	//var parameters string
 	for key, value := range paramMap {
-		if len(parameters) > 0 {
-			parameters += "&"
-		}
-		parameters += key + "=" + value
+		//if len(parameters) > 0 {
+		//	parameters += "&"
+		//}
+		//parameters += key + "=" + value
+		params.Add(key, value)
 	}
 
-	url := fmt.Sprintf("https://api.vk.com/method/%v?%v&access_token=%v&v=%v", methodName, parameters, r.config.GetAccessToken(), r.config.GetVersion())
+	u.RawQuery = params.Encode()
+	//url := fmt.Sprintf("https://api.vk.com/method/%v?%v&access_token=%v&v=%v", methodName, parameters, r.config.GetAccessToken(), r.config.GetVersion())
 
+	url := u.String()
 	resp, err := http.Get(url)
 	if err != nil {
 		return nil, fmt.Errorf("error during sending request for method %v, err:%v", methodName, err)

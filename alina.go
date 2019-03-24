@@ -56,7 +56,7 @@ func main() {
 			return
 		}
 		if strings.Contains(message.GetText(), "лучшая жена") {
-			alina.GetMessagesApi().SendSimpleMessage(strconv.Itoa(message.GetPeerId()), "Алина")
+			alina.GetMessagesApi().SendSimpleMessage(strconv.Itoa(message.GetPeerId()), "конечно Алина")
 		}
 	})
 

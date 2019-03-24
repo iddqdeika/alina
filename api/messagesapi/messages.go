@@ -33,6 +33,10 @@ func (a *messagesApi) SendSimpleMessage(peerId string, message string) {
 	}
 }
 
+//peerid is id of message destination
+//offset defines offset of messages got (due to max messages count is 200)
+//startMessageId is id of start message if known. to retrieve last messages use -1
+//fields are names of message object data additional fields you need to retrieve
 func (a *messagesApi) GetHistory(peerId string, offset int, count int, startMessageId string, fields []string) ([]definitions.PrivateMessage, error) {
 	params := make(map[string]string)
 	params["peer_id"] = peerId
