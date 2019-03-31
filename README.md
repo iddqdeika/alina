@@ -15,6 +15,7 @@ Alina can give simple MessagesApi (alina.GetMEssagesApi), that implements method
 We already can, for example, add MessageHandler to answer for some messages:
 
 alina.AddMessageHandler(func(message definitions.PrivateMessage, e error) {
+
 		if err != nil {
 			logger.Error(err)
 			return
