@@ -2,12 +2,8 @@ package main
 
 import (
 	"alina/alina"
-	"alina/api/messagesapi"
-	"alina/config"
-	"alina/dispatcher"
-	"alina/factories"
+	"alina/alinafactory"
 	"alina/logger"
-	"alina/requester"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -38,7 +34,7 @@ func main() {
 
 	logger.InitDefaultLogger()
 	logger := logger.DefaultLogger
-	al, err := New(cfg.AccessToken, "5.85", cfg.GroupId, logger, cfg.LongPollInt)
+	al, err := alinafactory.New(cfg.AccessToken, "5.85", cfg.GroupId, logger, cfg.LongPollInt)
 	if err != nil {
 		logger.Error(fmt.Sprintf("fatal error during Alina initialization: ", err))
 		return
@@ -71,52 +67,4 @@ func main() {
 
 	al.Run()
 
-}
-
-func New(token string, version string, groupid string, logger alina.Logger, longPollInterval int) (alina.Alina, error) {
-	var cfg alina.Config
-	var req alina.Requester
-	al := &alinacore{}
-
-	cfg = config.NewConfig(token, version, groupid, longPollInterval)
-
-	dispatcher := dispatcher.New(factories.GetPrivateMessageFactory())
-	al.dispatcher = dispatcher
-
-	req, err := requester.New(cfg, logger, dispatcher)
-	if err != nil {
-		return nil, err
-	}
-	al.requester = req
-
-	msg := messagesapi.New(req, logger, factories.GetPrivateMessageFactory())
-	al.messagesApi = msg
-
-	return al, nil
-}
-
-type alinacore struct {
-	requester   alina.Requester
-	dispatcher  alina.Dispatcher
-	messagesApi alina.MessagesApi
-}
-
-func (a *alinacore) GetMessagesApi() alina.MessagesApi {
-	return a.messagesApi
-}
-
-func (a *alinacore) AddMessageHandler(handler func(alina.PrivateMessage, error)) {
-	a.dispatcher.AddMessageHandler(handler)
-}
-
-func (a *alinacore) Init() error {
-	err := a.requester.Init()
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func (a *alinacore) Run() {
-	a.requester.Run()
 }
