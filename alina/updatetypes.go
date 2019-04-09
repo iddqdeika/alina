@@ -1,4 +1,4 @@
-package definitions
+package alina
 
 type UpdateType string
 

@@ -1,7 +1,7 @@
 package requester
 
 import (
-	"alina/definitions"
+	"alina/alina"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -17,7 +17,7 @@ var (
 	ErrDispatcher = errors.New("invalid dispatcher")
 )
 
-func New(config definitions.Config, logger definitions.Logger, dispatcher definitions.Dispatcher) (definitions.Requester, error) {
+func New(config alina.Config, logger alina.Logger, dispatcher alina.Dispatcher) (alina.Requester, error) {
 	r := &requester{}
 
 	if config == nil || len(config.GetAccessToken()) == 0 {
@@ -40,9 +40,9 @@ func New(config definitions.Config, logger definitions.Logger, dispatcher defini
 }
 
 type requester struct {
-	config      definitions.Config
-	logger      definitions.Logger
-	dispatcher  definitions.Dispatcher
+	config      alina.Config
+	logger      alina.Logger
+	dispatcher  alina.Dispatcher
 	key         string
 	server      string
 	ts          string

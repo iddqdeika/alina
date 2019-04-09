@@ -1,4 +1,4 @@
-package definitions
+package alina
 
 type PrivateMessagesFactory interface {
 	NewPrivateMessageFromUpdate(data UpdateBody) (PrivateMessage, error)

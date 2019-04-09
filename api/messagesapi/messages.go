@@ -1,13 +1,13 @@
 package messagesapi
 
 import (
-	"alina/definitions"
+	"alina/alina"
 	"encoding/json"
 	"fmt"
 	"strconv"
 )
 
-func New(requester definitions.Requester, logger definitions.Logger, privateMessageFactory definitions.PrivateMessagesFactory) definitions.MessagesApi {
+func New(requester alina.Requester, logger alina.Logger, privateMessageFactory alina.PrivateMessagesFactory) alina.MessagesApi {
 	mapi := &messagesApi{
 		requester:             requester,
 		logger:                logger,
@@ -18,9 +18,9 @@ func New(requester definitions.Requester, logger definitions.Logger, privateMess
 }
 
 type messagesApi struct {
-	requester             definitions.Requester
-	logger                definitions.Logger
-	privateMessageFactory definitions.PrivateMessagesFactory
+	requester             alina.Requester
+	logger                alina.Logger
+	privateMessageFactory alina.PrivateMessagesFactory
 }
 
 func (a *messagesApi) SendSimpleMessage(peerId string, message string) {
@@ -37,7 +37,7 @@ func (a *messagesApi) SendSimpleMessage(peerId string, message string) {
 //offset defines offset of messages got (due to max messages count is 200)
 //startMessageId is id of start message if known. to retrieve last messages use -1
 //fields are names of message object data additional fields you need to retrieve
-func (a *messagesApi) GetHistory(peerId string, offset int, count int, startMessageId string, fields []string) ([]definitions.PrivateMessage, error) {
+func (a *messagesApi) GetHistory(peerId string, offset int, count int, startMessageId string, fields []string) ([]alina.PrivateMessage, error) {
 	params := make(map[string]string)
 	params["peer_id"] = peerId
 	params["offset"] = strconv.Itoa(offset)
@@ -61,10 +61,10 @@ func (a *messagesApi) GetHistory(peerId string, offset int, count int, startMess
 		return nil, err
 	}
 
-	messages := make([]definitions.PrivateMessage, 0)
+	messages := make([]alina.PrivateMessage, 0)
 
 	for _, val := range responseBody.Response.Items {
-		var msg definitions.PrivateMessage
+		var msg alina.PrivateMessage
 		msg, err = a.privateMessageFactory.NewPrivateMessageFromInterface(val)
 		if err != nil {
 			return nil, fmt.Errorf("error during parsing message from history: %v", err)

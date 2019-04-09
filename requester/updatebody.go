@@ -1,6 +1,6 @@
 package requester
 
-import "alina/definitions"
+import "alina/alina"
 
 type updateBody struct {
 	UpdateType string      `json:"type"`
@@ -8,8 +8,8 @@ type updateBody struct {
 	GroupId    string      `json:group_id`
 }
 
-func (b *updateBody) GetType() definitions.UpdateType {
-	return definitions.UpdateType(b.UpdateType)
+func (b *updateBody) GetType() alina.UpdateType {
+	return alina.UpdateType(b.UpdateType)
 }
 
 func (b *updateBody) GetObject() interface{} {

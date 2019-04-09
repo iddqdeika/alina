@@ -1,11 +1,11 @@
 package logger
 
 import (
-	"alina/definitions"
+	"alina/alina"
 	"fmt"
 )
 
-var DefaultLogger definitions.Logger
+var DefaultLogger alina.Logger
 
 func InitDefaultLogger() {
 	DefaultLogger = &logger{}

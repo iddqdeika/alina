@@ -1,11 +1,11 @@
 package config
 
 import (
-	"alina/definitions"
+	"alina/alina"
 	"time"
 )
 
-func NewConfig(token string, version string, groupid string, longPollIntervalInMillis int) definitions.Config {
+func NewConfig(token string, version string, groupid string, longPollIntervalInMillis int) alina.Config {
 	return &config{
 		token:                    token,
 		version:                  version,

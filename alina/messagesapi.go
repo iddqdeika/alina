@@ -1,4 +1,4 @@
-package definitions
+package alina
 
 type MessagesApi interface {
 	SendSimpleMessage(peerId string, message string)

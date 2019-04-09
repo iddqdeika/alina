@@ -1,9 +1,9 @@
 package main
 
 import (
+	"alina/alina"
 	"alina/api/messagesapi"
 	"alina/config"
-	"alina/definitions"
 	"alina/dispatcher"
 	"alina/factories"
 	"alina/logger"
@@ -38,30 +38,30 @@ func main() {
 
 	logger.InitDefaultLogger()
 	logger := logger.DefaultLogger
-	alina, err := New(cfg.AccessToken, "5.85", cfg.GroupId, logger, cfg.LongPollInt)
+	al, err := New(cfg.AccessToken, "5.85", cfg.GroupId, logger, cfg.LongPollInt)
 	if err != nil {
 		logger.Error(fmt.Sprintf("fatal error during Alina initialization: ", err))
 		return
 	}
 
-	err = alina.Init()
+	err = al.Init()
 	if err != nil {
 		logger.Error(fmt.Sprintf("fatal error during Alina initialization: %v", err))
 		return
 	}
 
-	alina.AddMessageHandler(func(message definitions.PrivateMessage, e error) {
+	al.AddMessageHandler(func(message alina.PrivateMessage, e error) {
 		if err != nil {
 			logger.Error(err)
 			return
 		}
 		if strings.Contains(message.GetText(), "лучшая жена") {
-			alina.GetMessagesApi().SendSimpleMessage(strconv.Itoa(message.GetPeerId()), "конечно Алина")
+			al.GetMessagesApi().SendSimpleMessage(strconv.Itoa(message.GetPeerId()), "конечно Алина")
 		}
 	})
 
-	//alina.GetMessagesApi().SendSimpleMessage("16729505", "йоу")
-	//messages, err := alina.GetMessagesApi().GetHistory("16729505", 0, 200, "-1", nil)
+	//alinacore.GetMessagesApi().SendSimpleMessage("16729505", "йоу")
+	//messages, err := alinacore.GetMessagesApi().GetHistory("16729505", 0, 200, "-1", nil)
 	//for _, v := range messages {
 	//	println(v.GetText())
 	//}
@@ -69,14 +69,14 @@ func main() {
 	//
 	//}
 
-	alina.Run()
+	al.Run()
 
 }
 
-func New(token string, version string, groupid string, logger definitions.Logger, longPollInterval int) (definitions.Alina, error) {
-	var cfg definitions.Config
-	var req definitions.Requester
-	al := &alina{}
+func New(token string, version string, groupid string, logger alina.Logger, longPollInterval int) (alina.Alina, error) {
+	var cfg alina.Config
+	var req alina.Requester
+	al := &alinacore{}
 
 	cfg = config.NewConfig(token, version, groupid, longPollInterval)
 
@@ -95,21 +95,21 @@ func New(token string, version string, groupid string, logger definitions.Logger
 	return al, nil
 }
 
-type alina struct {
-	requester   definitions.Requester
-	dispatcher  definitions.Dispatcher
-	messagesApi definitions.MessagesApi
+type alinacore struct {
+	requester   alina.Requester
+	dispatcher  alina.Dispatcher
+	messagesApi alina.MessagesApi
 }
 
-func (a *alina) GetMessagesApi() definitions.MessagesApi {
+func (a *alinacore) GetMessagesApi() alina.MessagesApi {
 	return a.messagesApi
 }
 
-func (a *alina) AddMessageHandler(handler func(definitions.PrivateMessage, error)) {
+func (a *alinacore) AddMessageHandler(handler func(alina.PrivateMessage, error)) {
 	a.dispatcher.AddMessageHandler(handler)
 }
 
-func (a *alina) Init() error {
+func (a *alinacore) Init() error {
 	err := a.requester.Init()
 	if err != nil {
 		return err
@@ -117,6 +117,6 @@ func (a *alina) Init() error {
 	return nil
 }
 
-func (a *alina) Run() {
+func (a *alinacore) Run() {
 	a.requester.Run()
 }
