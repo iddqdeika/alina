@@ -37,24 +37,28 @@ func (f *privateMessageFactory) NewPrivateMessage(data []byte) (alina.PrivateMes
 }
 
 type privateMessage struct {
-	Id           int           `json:"id"`            //
-	Date         int           `json:"date"`          //
-	PeerId       int           `json:"peer_id"`       //
-	FromId       int           `json:"from_id"`       //
-	Text         string        `json:"text"`          //
-	RandomId     int           `json:"random_id"`     //
-	Ref          string        `json:"ref"`           //
-	RefSource    string        `json:"ref_source"`    //
-	Attachments  []interface{} `json:"attachments"`   //
-	Important    bool          `json:"important"`     //
-	Geo          *geo          `json:"geo"`           //
-	PayLoad      string        `json:"payload"`       //
-	FwdMessages  []interface{} `json:"fwd_messages"`  //
-	ReplyMessage interface{}   `json:"reply_message"` //
-	Action       interface{}   `json:"action"`        //
+	Id           int           `json:"id"`                      //
+	ConvMsgId    int           `json:"conversation_message_id"` //
+	Date         int           `json:"date"`                    //
+	PeerId       int           `json:"peer_id"`                 //
+	FromId       int           `json:"from_id"`                 //
+	Text         string        `json:"text"`                    //
+	RandomId     int           `json:"random_id"`               //
+	Ref          string        `json:"ref"`                     //
+	RefSource    string        `json:"ref_source"`              //
+	Attachments  []interface{} `json:"attachments"`             //
+	Important    bool          `json:"important"`               //
+	Geo          *geo          `json:"geo"`                     //
+	PayLoad      string        `json:"payload"`                 //
+	FwdMessages  []interface{} `json:"fwd_messages"`            //
+	ReplyMessage interface{}   `json:"reply_message"`           //
+	Action       interface{}   `json:"action"`                  //
 }
 
 func (m *privateMessage) GetId() int {
+	if m.ConvMsgId != 0 {
+		return m.ConvMsgId
+	}
 	return m.Id
 }
 
