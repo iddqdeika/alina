@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"strconv"
+	"strings"
 )
 
 func New(requester alina.Requester, logger alina.Logger, privateMessageFactory alina.PrivateMessagesFactory) alina.MessagesApi {
@@ -30,6 +31,17 @@ func (a *messagesApi) SendSimpleMessage(peerId string, message string) {
 	res, err := a.requester.SendGet("messages.send", params)
 	if err != nil {
 		a.logger.Error(fmt.Sprintf("error during sending message: %v, %v", err, string(res)))
+	}
+}
+
+func (a *messagesApi) SendMessageWithForward(peerId string, message string, forward_messages []string) {
+	params := make(map[string]string)
+	params["peer_id"] = peerId
+	params["message"] = message
+	params["forward_messages"] = strings.Join(forward_messages, ",")
+	res, err := a.requester.SendGet("messages.send", params)
+	if err != nil {
+		a.logger.Error(fmt.Sprintf("error during sending message with forwarding: %v, %v", err, string(res)))
 	}
 }
 
