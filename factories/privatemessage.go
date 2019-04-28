@@ -50,7 +50,7 @@ type privateMessage struct {
 	Important    bool          `json:"important"`               //
 	Geo          *geo          `json:"geo"`                     //
 	PayLoad      string        `json:"payload"`                 //
-	FwdMessages  []interface{} `json:"fwd_messages"`            //
+	FwdMessages  []*fwdMessage `json:"fwd_messages"`            //
 	ReplyMessage interface{}   `json:"reply_message"`           //
 	Action       interface{}   `json:"action"`                  //
 }
@@ -106,7 +106,7 @@ func (m *privateMessage) GetPayLoad() string {
 	return m.PayLoad
 }
 
-func (m *privateMessage) GetFwdMessages() []interface{} {
+func (m *privateMessage) GetFwdMessages() []*fwdMessage {
 	return m.FwdMessages
 }
 
@@ -133,4 +133,11 @@ type place struct {
 	Icon      string  `json:"icon"`
 	Country   string  `json:"country"`
 	City      string  `json:"city"`
+}
+
+type fwdMessage struct {
+	Attachments []interface{} `json:"arrachments"`
+	Date        int           `json:"date"`
+	From_id     int           `json:"from_id"`
+	Text        string        `json:"text"`
 }

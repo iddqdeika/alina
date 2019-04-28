@@ -17,3 +17,10 @@ type PrivateMessage interface {
 	GetReplyMessage() interface{}
 	GetAction() interface{}
 }
+
+type FwdMEssage interface {
+	GetAttachments() []interface{}
+	GetDate() int
+	GetFromID() int
+	GetText() string
+}
