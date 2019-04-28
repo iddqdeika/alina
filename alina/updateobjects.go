@@ -13,12 +13,12 @@ type PrivateMessage interface {
 	IsImportant() bool
 	GetGeo() interface{}
 	GetPayLoad() string
-	GetFwdMessages() []interface{}
+	GetFwdMessages() []FwdMessage
 	GetReplyMessage() interface{}
 	GetAction() interface{}
 }
 
-type FwdMEssage interface {
+type FwdMessage interface {
 	GetAttachments() []interface{}
 	GetDate() int
 	GetFromID() int

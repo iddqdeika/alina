@@ -106,8 +106,12 @@ func (m *privateMessage) GetPayLoad() string {
 	return m.PayLoad
 }
 
-func (m *privateMessage) GetFwdMessages() []*fwdMessage {
-	return m.FwdMessages
+func (m *privateMessage) GetFwdMessages() []alina.FwdMessage {
+	result := make([]alina.FwdMessage, 0)
+	for _, v := range m.FwdMessages {
+		result = append(result, v)
+	}
+	return result
 }
 
 func (m *privateMessage) GetReplyMessage() interface{} {
@@ -140,4 +144,20 @@ type fwdMessage struct {
 	Date        int           `json:"date"`
 	From_id     int           `json:"from_id"`
 	Text        string        `json:"text"`
+}
+
+func (m *fwdMessage) GetAttachments() []interface{} {
+	return m.Attachments
+}
+
+func (m *fwdMessage) GetDate() int {
+	return m.Date
+}
+
+func (m *fwdMessage) GetFromID() int {
+	return m.From_id
+}
+
+func (m *fwdMessage) GetText() string {
+	return m.Text
 }
