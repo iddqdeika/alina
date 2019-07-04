@@ -140,7 +140,7 @@ type place struct {
 }
 
 type fwdMessage struct {
-	Attachments []interface{} `json:"arrachments"`
+	Attachments []interface{} `json:"attachments"`
 	Date        int           `json:"date"`
 	From_id     int           `json:"from_id"`
 	Text        string        `json:"text"`
@@ -160,4 +160,19 @@ func (m *fwdMessage) GetFromID() int {
 
 func (m *fwdMessage) GetText() string {
 	return m.Text
+}
+
+type attachment struct {
+	Type        string      `json:"type"`
+	Photo       interface{} `json:"photo"`
+	Video       interface{} `json:"video"`
+	Audio       interface{} `json:"audio"`
+	Doc         interface{} `json:"doc"`
+	Link        interface{} `json:"link"`
+	Market      interface{} `json:"market"`
+	MarketAlbum interface{} `json:"market_album"`
+	Wall        interface{} `json:"wall"`
+	WallReply   interface{} `json:"wall_reply"`
+	Sticker     interface{} `json:"sticker"`
+	Gift        interface{} `json:"gift"`
 }
