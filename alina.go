@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"io/ioutil"
 	"strconv"
-	"strings"
 )
 
 const (
-	cfgName = "config.cfg"
+	cfgName      = "config.cfg"
+	vkApiVersion = "5.85"
 )
 
 func main() {
@@ -34,7 +34,7 @@ func main() {
 
 	logger.InitDefaultLogger()
 	logger := logger.DefaultLogger
-	al, err := alinafactory.New(cfg.AccessToken, "5.85", cfg.GroupId, logger, cfg.LongPollInt)
+	al, err := alinafactory.New(cfg.AccessToken, vkApiVersion, cfg.GroupId, logger, cfg.LongPollInt)
 	if err != nil {
 		logger.Error(fmt.Sprintf("fatal error during Alina initialization: ", err))
 		return
@@ -51,8 +51,18 @@ func main() {
 			logger.Error(err)
 			return
 		}
-		if strings.Contains(message.GetText(), "лучшая жена") {
-			al.GetMessagesApi().SendSimpleMessage(strconv.Itoa(message.GetPeerId()), "конечно Алина")
+
+		test(message)
+		if message.GetConversationMessageID() > 0 {
+
+			msgs, err := al.GetMessagesApi().GetHistory("2000000002", -1, 10, "", []string{})
+			if err != nil {
+
+			}
+			if msgs != nil {
+
+			}
+			al.GetMessagesApi().GetConversationMessageId(strconv.Itoa(message.GetPeerId()), strconv.Itoa(message.GetConversationMessageID()))
 		}
 	})
 
@@ -66,5 +76,10 @@ func main() {
 	//}
 
 	al.Run()
+
+}
+
+func test(message alina.PrivateMessage) {
+	println("str")
 
 }

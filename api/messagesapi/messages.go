@@ -24,6 +24,20 @@ type messagesApi struct {
 	privateMessageFactory alina.PrivateMessagesFactory
 }
 
+func (a *messagesApi) GetConversationMessageId(peerId string, convMessagesId string) (string, error) {
+	params := make(map[string]string)
+	params["peer_id"] = peerId
+	params["conversation_message_ids"] = convMessagesId
+	res, err := a.requester.SendGet("messages.getByConversationMessageId", params)
+	if err != nil {
+		a.logger.Error(fmt.Sprintf("error during gettinf message id for conversation message: %v, %v", err, string(res)))
+	}
+
+	str := string(res)
+
+	return str, nil
+}
+
 func (a *messagesApi) SendSimpleMessage(peerId string, message string) {
 	params := make(map[string]string)
 	params["peer_id"] = peerId

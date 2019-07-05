@@ -46,7 +46,7 @@ type privateMessage struct {
 	RandomId     int           `json:"random_id"`               //
 	Ref          string        `json:"ref"`                     //
 	RefSource    string        `json:"ref_source"`              //
-	Attachments  []interface{} `json:"attachments"`             //
+	Attachments  []*attachment `json:"attachments"`             //
 	Important    bool          `json:"important"`               //
 	Geo          *geo          `json:"geo"`                     //
 	PayLoad      string        `json:"payload"`                 //
@@ -56,10 +56,11 @@ type privateMessage struct {
 }
 
 func (m *privateMessage) GetId() int {
-	if m.ConvMsgId != 0 {
-		return m.ConvMsgId
-	}
 	return m.Id
+}
+
+func (m *privateMessage) GetConversationMessageID() int {
+	return m.ConvMsgId
 }
 
 func (m *privateMessage) GetDate() int {
@@ -90,8 +91,12 @@ func (m *privateMessage) GetRefSource() string {
 	return m.RefSource
 }
 
-func (m *privateMessage) GetAttachments() []interface{} {
-	return m.Attachments
+func (m *privateMessage) GetAttachments() []alina.Attachment {
+	result := make([]alina.Attachment, 0)
+	for _, v := range m.Attachments {
+		result = append(result, v)
+	}
+	return result
 }
 
 func (m *privateMessage) IsImportant() bool {
@@ -140,14 +145,18 @@ type place struct {
 }
 
 type fwdMessage struct {
-	Attachments []interface{} `json:"attachments"`
+	Attachments []*attachment `json:"attachments"`
 	Date        int           `json:"date"`
 	From_id     int           `json:"from_id"`
 	Text        string        `json:"text"`
 }
 
-func (m *fwdMessage) GetAttachments() []interface{} {
-	return m.Attachments
+func (m *fwdMessage) GetAttachments() []alina.Attachment {
+	result := make([]alina.Attachment, 0)
+	for _, v := range m.Attachments {
+		result = append(result, v)
+	}
+	return result
 }
 
 func (m *fwdMessage) GetDate() int {
@@ -163,16 +172,40 @@ func (m *fwdMessage) GetText() string {
 }
 
 type attachment struct {
-	Type        string      `json:"type"`
-	Photo       interface{} `json:"photo"`
-	Video       interface{} `json:"video"`
-	Audio       interface{} `json:"audio"`
-	Doc         interface{} `json:"doc"`
-	Link        interface{} `json:"link"`
-	Market      interface{} `json:"market"`
-	MarketAlbum interface{} `json:"market_album"`
-	Wall        interface{} `json:"wall"`
-	WallReply   interface{} `json:"wall_reply"`
-	Sticker     interface{} `json:"sticker"`
-	Gift        interface{} `json:"gift"`
+	Type        alina.AttachmentType `json:"type"`
+	Photo       interface{}          `json:"photo"`
+	Video       interface{}          `json:"video"`
+	Audio       interface{}          `json:"audio"`
+	Doc         interface{}          `json:"doc"`
+	Link        interface{}          `json:"link"`
+	Market      interface{}          `json:"market"`
+	MarketAlbum interface{}          `json:"market_album"`
+	Wall        interface{}          `json:"wall"`
+	WallReply   interface{}          `json:"wall_reply"`
+	Sticker     interface{}          `json:"sticker"`
+	Gift        interface{}          `json:"gift"`
+}
+
+func (a *attachment) GetType() alina.AttachmentType {
+	return a.Type
+}
+
+func (a *attachment) IsMedia() bool {
+	return a.Type == alina.PhotoAttachment || a.Type == alina.VideoAttachment || a.Type == alina.AudioAttachment || a.Type == alina.DocAttachment
+}
+
+func (a *attachment) GetAsPhoto() (alina.Photo, error) {
+
+}
+
+type photo struct {
+	Id      int
+	AlbumId int
+	OwnerId int
+	UserId  int
+	Text    string
+	Date    int
+	Sizes   []interface{}
+	Width   int
+	Height  int
 }

@@ -38,5 +38,5 @@ const (
 	PollVoteNew          UpdateType = "poll_vote_new"
 	GroupOfficersEdit    UpdateType = "group_officers_edit"
 	GroupChangeSettings  UpdateType = "group_change_settings"
-	GroupChangePhoto     UpdateType = "group_change_photo "
+	GroupChangePhoto     UpdateType = "group_change_photo"
 )
