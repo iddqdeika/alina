@@ -3,6 +3,7 @@ package factories
 import (
 	"alina/alina"
 	"encoding/json"
+	"errors"
 )
 
 var privateMessageF = &privateMessageFactory{}
@@ -173,8 +174,8 @@ func (m *fwdMessage) GetText() string {
 
 type attachment struct {
 	Type        alina.AttachmentType `json:"type"`
-	Photo       interface{}          `json:"photo"`
-	Video       interface{}          `json:"video"`
+	Photo       *photo               `json:"photo"`
+	Video       *video               `json:"video"`
 	Audio       interface{}          `json:"audio"`
 	Doc         interface{}          `json:"doc"`
 	Link        interface{}          `json:"link"`
@@ -195,17 +196,211 @@ func (a *attachment) IsMedia() bool {
 }
 
 func (a *attachment) GetAsPhoto() (alina.Photo, error) {
+	if a.Type == alina.PhotoAttachment {
+		return a.Photo, nil
+	}
+	return nil, errors.New("incorrect type")
+}
 
+func (a *attachment) GetAsVideo() (alina.Video, error) {
+	if a.Type == alina.VideoAttachment {
+		return a.Video, nil
+	}
+	return nil, errors.New("incorrect type")
 }
 
 type photo struct {
-	Id      int
-	AlbumId int
-	OwnerId int
-	UserId  int
-	Text    string
-	Date    int
-	Sizes   []interface{}
-	Width   int
-	Height  int
+	Id      int           `json:"id"`
+	AlbumId int           `json:"album_id"`
+	OwnerId int           `json:"owner_id"`
+	UserId  int           `json:"user_id"`
+	Text    string        `json:"text"`
+	Date    int           `json:"date"`
+	Sizes   []interface{} `json:"sizes"`
+	Width   int           `json:"width"`
+	Height  int           `json:"height"`
+}
+
+func (p *photo) GetId() int {
+	return p.Id
+}
+
+func (p *photo) GetAlbumId() int {
+	return p.AlbumId
+}
+
+func (p *photo) GetOwnerId() int {
+	return p.OwnerId
+}
+
+func (p *photo) GetUserId() int {
+	return p.UserId
+}
+
+func (p *photo) GetText() string {
+	return p.Text
+}
+
+func (p *photo) GetDate() int {
+	return p.Date
+}
+
+func (p *photo) GetSizes() []interface{} {
+	return p.Sizes
+}
+
+func (p *photo) GetWidth() int {
+	return p.Width
+}
+
+func (p *photo) GetHeight() int {
+	return p.Height
+}
+
+type video struct {
+	Id             int
+	OwnerId        int
+	Title          string
+	Description    string
+	Duration       int
+	Photo130       string
+	Photo320       string
+	Photo640       string
+	Photo800       string
+	Photo1280      string
+	FirstFrame130  string
+	FirstFrame320  string
+	FirstFrame640  string
+	FirstFrame800  string
+	FirstFrame1280 string
+	Date           int
+	AddingDate     int
+	Views          int
+	Comments       int
+	Player         string
+	Platform       string
+	CanEdit        int
+	CanAdd         int
+	IsPrivate      int
+	AccessKey      string
+	Processing     int
+	Live           int
+	Upcoming       int
+	IsFavorite     bool
+}
+
+func (v *video) GetId() int {
+	return v.Id
+}
+
+func (v *video) GetOwnerId() int {
+	return v.OwnerId
+}
+
+func (v *video) GetTitle() string {
+	return v.Title
+}
+
+func (v *video) GetDescription() string {
+	return v.GetDescription()
+}
+
+func (v *video) GetDuration() int {
+	return v.Duration
+}
+
+func (v *video) GetPhoto130() string {
+	return v.Photo130
+}
+
+func (v *video) GetPhoto320() string {
+	return v.Photo320
+}
+
+func (v *video) GetPhoto640() string {
+	return v.Photo640
+}
+
+func (v *video) GetPhoto800() string {
+	return v.Photo800
+}
+
+func (v *video) GetPhoto1280() string {
+	return v.Photo1280
+}
+
+func (v *video) GetFirstFrame130() string {
+	return v.FirstFrame130
+}
+
+func (v *video) GetFirstFrame320() string {
+	return v.FirstFrame320
+}
+
+func (v *video) GetFirstFrame640() string {
+	return v.FirstFrame640
+}
+
+func (v *video) GetFirstFrame800() string {
+	return v.FirstFrame800
+}
+
+func (v *video) GetFirstFrame1280() string {
+	return v.FirstFrame1280
+}
+
+func (v *video) GetDate() int {
+	return v.Date
+}
+
+func (v *video) GetAddingDate() int {
+	return v.AddingDate
+}
+
+func (v *video) GetViews() int {
+	return v.Views
+}
+
+func (v *video) GetComments() int {
+	return v.Comments
+}
+
+func (v *video) GetPlayer() string {
+	return v.Player
+}
+
+func (v *video) GetPlatform() string {
+	return v.Platform
+}
+
+func (v *video) GetCanEdit() int {
+	return v.CanEdit
+}
+
+func (v *video) GetCanAdd() int {
+	return v.CanAdd
+}
+
+func (v *video) GetIsPrivate() int {
+	return v.IsPrivate
+}
+
+func (v *video) GetAccessKey() string {
+	return v.AccessKey
+}
+
+func (v *video) GetProcessing() int {
+	return v.Processing
+}
+
+func (v *video) GetLive() int {
+	return v.Live
+}
+
+func (v *video) GetUpcoming() int {
+	return v.Upcoming
+}
+
+func (v *video) GetIsFavorite() bool {
+	return v.IsFavorite
 }

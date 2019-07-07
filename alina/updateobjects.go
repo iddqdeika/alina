@@ -43,3 +43,50 @@ type Photo interface {
 	GetWidth() int
 	GetHeight() int
 }
+
+type Video interface {
+	GetId() int
+	GetOwnerId() int
+	GetTitle() string
+	GetDescription() string
+	GetDuration() int
+	GetPhoto130() string
+	GetPhoto320() string
+	GetPhoto640() string
+	GetPhoto800() string
+	GetPhoto1280() string
+	GetFirstFrame130() string
+	GetFirstFrame320() string
+	GetFirstFrame640() string
+	GetFirstFrame800() string
+	GetFirstFrame1280() string
+	GetDate() int
+	GetAddingDate() int
+	GetViews() int
+	GetComments() int
+	GetPlayer() string
+	GetPlatform() string
+	GetCanEdit() int
+	GetCanAdd() int
+	GetIsPrivate() int
+	GetAccessKey() string
+	GetProcessing() int
+	GetLive() int
+	GetUpcoming() int
+	GetIsFavorite() bool
+}
+
+type Audio interface {
+	GetId() int
+	GetOwnerId() int
+	GetArtist() string
+	GetTitle() string
+	GetDuration() int
+	GetUrl() string
+	GetLyricsId() int
+	GetAlbumId() int
+	GetGenreId() int
+	GetDate() int
+	GetNoSearch() int
+	GetIsHq() int
+}
