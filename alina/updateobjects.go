@@ -30,6 +30,9 @@ type Attachment interface {
 	GetType() AttachmentType
 	IsMedia() bool
 	GetAsPhoto() (Photo, error)
+	GetAsVideo() (Video, error)
+	GetAsAudio() (Audio, error)
+	GetPrivateMessageToken() (string, error)
 }
 
 type MediaAttachment interface {

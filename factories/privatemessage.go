@@ -4,6 +4,7 @@ import (
 	"alina/alina"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"strconv"
 )
 
@@ -186,6 +187,34 @@ type attachment struct {
 	WallReply   interface{}          `json:"wall_reply"`
 	Sticker     interface{}          `json:"sticker"`
 	Gift        interface{}          `json:"gift"`
+}
+
+func (a *attachment) GetPrivateMessageToken() (string, error) {
+	if a.IsMedia() {
+		switch a.Type {
+		case alina.PhotoAttachment:
+			photo, err := a.GetAsPhoto()
+			if err != nil {
+				return "", fmt.Errorf("error while token generation: %v", err)
+			}
+			return photo.GetPrivateMessageToken(), nil
+		case alina.VideoAttachment:
+			video, err := a.GetAsVideo()
+			if err != nil {
+				return "", fmt.Errorf("error while token generation: %v", err)
+			}
+			return video.GetPrivateMessageToken(), nil
+		case alina.AudioAttachment:
+			audio, err := a.GetAsAudio()
+			if err != nil {
+				return "", fmt.Errorf("error while token generation: %v", err)
+			}
+			return audio.GetPrivateMessageToken(), nil
+		default:
+			return "", errors.New("unimplemented")
+		}
+	}
+	return "", errors.New("attachment is not media")
 }
 
 func (a *attachment) GetType() alina.AttachmentType {
