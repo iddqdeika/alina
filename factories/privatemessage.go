@@ -4,6 +4,7 @@ import (
 	"alina/alina"
 	"encoding/json"
 	"errors"
+	"strconv"
 )
 
 var privateMessageF = &privateMessageFactory{}
@@ -176,7 +177,7 @@ type attachment struct {
 	Type        alina.AttachmentType `json:"type"`
 	Photo       *photo               `json:"photo"`
 	Video       *video               `json:"video"`
-	Audio       interface{}          `json:"audio"`
+	Audio       *audio               `json:"audio"`
 	Doc         interface{}          `json:"doc"`
 	Link        interface{}          `json:"link"`
 	Market      interface{}          `json:"market"`
@@ -209,6 +210,13 @@ func (a *attachment) GetAsVideo() (alina.Video, error) {
 	return nil, errors.New("incorrect type")
 }
 
+func (a *attachment) GetAsAudio() (alina.Audio, error) {
+	if a.Type == alina.AudioAttachment {
+		return a.Audio, nil
+	}
+	return nil, errors.New("incorrect type")
+}
+
 type photo struct {
 	Id      int           `json:"id"`
 	AlbumId int           `json:"album_id"`
@@ -219,6 +227,10 @@ type photo struct {
 	Sizes   []interface{} `json:"sizes"`
 	Width   int           `json:"width"`
 	Height  int           `json:"height"`
+}
+
+func (p *photo) GetPrivateMessageToken() string {
+	return string(alina.PhotoAttachment) + strconv.Itoa(p.OwnerId) + "_" + strconv.Itoa(p.Id)
 }
 
 func (p *photo) GetId() int {
@@ -258,35 +270,42 @@ func (p *photo) GetHeight() int {
 }
 
 type video struct {
-	Id             int
-	OwnerId        int
-	Title          string
-	Description    string
-	Duration       int
-	Photo130       string
-	Photo320       string
-	Photo640       string
-	Photo800       string
-	Photo1280      string
-	FirstFrame130  string
-	FirstFrame320  string
-	FirstFrame640  string
-	FirstFrame800  string
-	FirstFrame1280 string
-	Date           int
-	AddingDate     int
-	Views          int
-	Comments       int
-	Player         string
-	Platform       string
-	CanEdit        int
-	CanAdd         int
-	IsPrivate      int
-	AccessKey      string
-	Processing     int
-	Live           int
-	Upcoming       int
-	IsFavorite     bool
+	Id             int    `json:"id"`
+	OwnerId        int    `json:"owner_id"`
+	Title          string `json:"title"`
+	Description    string `json:"description"`
+	Duration       int    `json:"duration"`
+	Photo130       string `json:"photo_130"`
+	Photo320       string `json:"photo_320"`
+	Photo640       string `json:"photo_640"`
+	Photo800       string `json:"photo_800"`
+	Photo1280      string `json:"photo_1280"`
+	FirstFrame130  string `json:"first_frame_130"`
+	FirstFrame320  string `json:"first_frame_320"`
+	FirstFrame640  string `json:"first_frame_640"`
+	FirstFrame800  string `json:"first_frame_800"`
+	FirstFrame1280 string `json:"first_frame_1280"`
+	Date           int    `json:"date"`
+	AddingDate     int    `json:"adding_date"`
+	Views          int    `json:"views"`
+	Comments       int    `json:"comments"`
+	Player         string `json:"player"`
+	Platform       string `json:"platform"`
+	CanEdit        int    `json:"can_edit"`
+	CanAdd         int    `json:"can_add"`
+	IsPrivate      int    `json:"is_private"`
+	AccessKey      string `json:"access_key"`
+	Processing     int    `json:"processing"`
+	Live           int    `json:"live"`
+	Upcoming       int    `json:"upcoming"`
+	IsFavorite     bool   `json:"is_favorite"`
+}
+
+func (v *video) GetPrivateMessageToken() string {
+	if len(v.AccessKey) > 0 {
+		return string(alina.VideoAttachment) + strconv.Itoa(v.OwnerId) + "_" + strconv.Itoa(v.Id) + "_" + v.AccessKey
+	}
+	return string(alina.VideoAttachment) + strconv.Itoa(v.OwnerId) + "_" + strconv.Itoa(v.Id)
 }
 
 func (v *video) GetId() int {
@@ -403,4 +422,71 @@ func (v *video) GetUpcoming() int {
 
 func (v *video) GetIsFavorite() bool {
 	return v.IsFavorite
+}
+
+type audio struct {
+	Id       int    `json:"id"`
+	OwnerId  int    `json:"owner_id"`
+	Artist   string `json:"artist"`
+	Title    string `json:"title"`
+	Duration int    `json:"duration"`
+	Url      string `json:"url"`
+	LyricsId int    `json:"lyrics_id"`
+	AlbumId  int    `json:"album_id"`
+	GenreId  int    `json:"genre_id"`
+	Date     int    `json:"date"`
+	NoSearch int    `json:"no_search"`
+	IsHq     int    `json:"is_hq"`
+}
+
+func (a *audio) GetPrivateMessageToken() string {
+	return string(alina.AudioAttachment) + strconv.Itoa(a.OwnerId) + "_" + strconv.Itoa(a.Id)
+}
+
+func (a *audio) GetId() int {
+	return a.Id
+}
+
+func (a *audio) GetOwnerId() int {
+	return a.OwnerId
+}
+
+func (a *audio) GetArtist() string {
+	return a.Artist
+}
+
+func (a *audio) GetTitle() string {
+	return a.Title
+}
+
+func (a *audio) GetDuration() int {
+	return a.Duration
+}
+
+func (a *audio) GetUrl() string {
+	return a.Url
+}
+
+func (a *audio) GetLyricsId() int {
+	return a.LyricsId
+}
+
+func (a *audio) GetAlbumId() int {
+	return a.AlbumId
+}
+
+func (a *audio) GetGenreId() int {
+	return a.GenreId
+}
+
+func (a *audio) GetDate() int {
+	return a.Date
+}
+
+func (a *audio) GetNoSearch() int {
+	return a.NoSearch
+}
+
+func (a *audio) GetIsHq() int {
+	return a.IsHq
 }

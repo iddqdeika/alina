@@ -32,7 +32,12 @@ type Attachment interface {
 	GetAsPhoto() (Photo, error)
 }
 
+type MediaAttachment interface {
+	GetPrivateMessageToken() string
+}
+
 type Photo interface {
+	MediaAttachment
 	GetId() int
 	GetAlbumId() int
 	GetOwnerId() int
@@ -45,6 +50,7 @@ type Photo interface {
 }
 
 type Video interface {
+	MediaAttachment
 	GetId() int
 	GetOwnerId() int
 	GetTitle() string
@@ -77,6 +83,7 @@ type Video interface {
 }
 
 type Audio interface {
+	MediaAttachment
 	GetId() int
 	GetOwnerId() int
 	GetArtist() string
