@@ -24,7 +24,7 @@ type messagesApi struct {
 	privateMessageFactory alina.PrivateMessagesFactory
 }
 
-func (a *messagesApi) SendMessageWithAttachment(peerId string, message string, attachment string) {
+func (a *messagesApi) SendMessageWithAttachment(peerId string, message string, attachment string) ([]byte, error) {
 	params := make(map[string]string)
 	params["peer_id"] = peerId
 	params["message"] = message
@@ -33,6 +33,7 @@ func (a *messagesApi) SendMessageWithAttachment(peerId string, message string, a
 	if err != nil {
 		a.logger.Error(fmt.Sprintf("error during sending message: %v, %v", err, string(res)))
 	}
+	return res, err
 }
 
 func (a *messagesApi) GetConversationMessageId(peerId string, convMessagesId string) (string, error) {
@@ -49,7 +50,7 @@ func (a *messagesApi) GetConversationMessageId(peerId string, convMessagesId str
 	return str, nil
 }
 
-func (a *messagesApi) SendSimpleMessage(peerId string, message string) {
+func (a *messagesApi) SendSimpleMessage(peerId string, message string) ([]byte, error) {
 	params := make(map[string]string)
 	params["peer_id"] = peerId
 	params["message"] = message
@@ -59,7 +60,7 @@ func (a *messagesApi) SendSimpleMessage(peerId string, message string) {
 	}
 }
 
-func (a *messagesApi) SendMessageWithForward(peerId string, message string, forward_messages []string) {
+func (a *messagesApi) SendMessageWithForward(peerId string, message string, forward_messages []string) ([]byte, error) {
 	params := make(map[string]string)
 	params["peer_id"] = peerId
 	params["message"] = message
