@@ -465,7 +465,7 @@ type audio struct {
 	GenreId  int    `json:"genre_id"`
 	Date     int    `json:"date"`
 	NoSearch int    `json:"no_search"`
-	IsHq     int    `json:"is_hq"`
+	IsHq     bool   `json:"is_hq"`
 }
 
 func (a *audio) GetPrivateMessageToken() string {
@@ -516,6 +516,6 @@ func (a *audio) GetNoSearch() int {
 	return a.NoSearch
 }
 
-func (a *audio) GetIsHq() int {
+func (a *audio) GetIsHq() bool {
 	return a.IsHq
 }

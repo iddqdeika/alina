@@ -16,7 +16,7 @@ func New(token string, version string, groupid string, logger alina.Logger, long
 
 	cfg = config.NewConfig(token, version, groupid, longPollInterval)
 
-	dispatcher := dispatcher.New(factories.GetPrivateMessageFactory())
+	dispatcher := dispatcher.New(factories.GetPrivateMessageFactory(), logger)
 	al.dispatcher = dispatcher
 
 	req, err := requester.New(cfg, logger, dispatcher)

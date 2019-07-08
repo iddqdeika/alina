@@ -24,6 +24,17 @@ type messagesApi struct {
 	privateMessageFactory alina.PrivateMessagesFactory
 }
 
+func (a *messagesApi) SendMessageWithAttachment(peerId string, message string, attachment string) {
+	params := make(map[string]string)
+	params["peer_id"] = peerId
+	params["message"] = message
+	params["attachment"] = attachment
+	res, err := a.requester.SendGet("messages.send", params)
+	if err != nil {
+		a.logger.Error(fmt.Sprintf("error during sending message: %v, %v", err, string(res)))
+	}
+}
+
 func (a *messagesApi) GetConversationMessageId(peerId string, convMessagesId string) (string, error) {
 	params := make(map[string]string)
 	params["peer_id"] = peerId

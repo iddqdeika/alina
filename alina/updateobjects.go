@@ -98,5 +98,5 @@ type Audio interface {
 	GetGenreId() int
 	GetDate() int
 	GetNoSearch() int
-	GetIsHq() int
+	GetIsHq() bool
 }
